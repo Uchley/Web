@@ -1,9 +1,10 @@
 package com.example.application.views.list;
 
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -12,19 +13,39 @@ import com.vaadin.flow.router.Route;
 public class ListView extends VerticalLayout {
 
     public ListView() {
-        setSpacing(false);
+        NumberField wzrost = new NumberField();
+        wzrost.setLabel("wzrost");
+        wzrost.setValue(0.00);
+        Div znak = new Div();
+        znak.setText("m");
+        wzrost.setPrefixComponent(znak);
 
-        Image img = new Image("images/empty-plant.png", "placeholder plant");
-        img.setWidth("200px");
-        add(img);
 
-        add(new H2("This place intentionally left empty"));
-        add(new Paragraph("It’s a place where you can grow your own UI 🤗"));
+        NumberField waga = new NumberField();
+        waga.setLabel("waga");
+        waga.setValue(0.00);
+        Div znak1 = new Div();
+        znak1.setText("kg");
+        waga.setPrefixComponent(znak1);
 
-        setSizeFull();
-        setJustifyContentMode(JustifyContentMode.CENTER);
-        setDefaultHorizontalComponentAlignment(Alignment.CENTER);
-        getStyle().set("text-align", "center");
+        Button oblicz = new Button("Oblicz BMI");
+
+        Span niedowaga = new Span("<18,5 = Niedowaga");
+        niedowaga.getElement().getThemeList().add("badge");
+
+        Span norma = new Span("18,5 - 24,99 = Norma");
+        norma.getElement().getThemeList().add("badge success");
+
+        Span nadwaga = new Span("25 - 29,99 = Nadwaga");
+        nadwaga.getElement().getThemeList().add("badge error");
+
+        Span otylosc = new Span(">29,99 = otyłość");
+        otylosc.getElement().getThemeList().add("badge contrast");
+
+
+        oblicz.addClickListener(click-> Notification.show("Twoje BMI wynosi: " + waga.getValue()/Math.pow(wzrost.getValue(), 2.0)));
+
+        add(wzrost, waga, oblicz, niedowaga, norma, nadwaga, otylosc);
     }
 
 }
